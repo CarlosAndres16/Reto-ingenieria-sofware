@@ -1,0 +1,42 @@
+# Puerto en el que corre el API Gateway
+# Todos los microservicios se acceden a través de este puerto
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway  # Nombre del microservicio
+  cloud:
+    gateway:
+      routes:
+        # RUTA 1: Auth Service al Auth Service que corre en el puerto 8081
+        - id: auth
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+
+        # RUTA 2: Catalog Service Catalog Service que corre en el puerto 8082
+
+        - id: catalog
+          uri: http://localhost:8082
+          predicates:
+            - Path=/catalog/**
+          filters:
+            - StripPrefix=1
+
+        # RUTA 3: Orders Service,Service que corre en el puerto 8083
+
+        - id: orders
+          uri: http://localhost:8083
+          predicates:
+            - Path=/orders/**
+          filters:
+            - StripPrefix=1
+
+# Configuración del Actuator,verifica que el gateway ete activo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

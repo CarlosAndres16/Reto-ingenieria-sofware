@@ -1,0 +1,42 @@
+# Puerto en el que corre el Auth Service
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service  # Nombre del microservicio
+
+  # Configuración de conexión a la base de datos
+  # Apunta al contenedor Docker (docker-compose)
+  datasource:
+
+    # Puerto y nombre de la BD
+    url: jdbc:postgresql://localhost:5432/authdb  
+    username: reto      
+    password: reto   
+    # Driver de PostgreSQL
+    driver-class-name: org.postgresql.Driver  
+
+  # Configuración de JPA/Hibernate (manejo de base de datos)
+  jpa:
+    hibernate:
+      ddl-auto: update  
+    show-sql: true      
+    properties:
+      hibernate:
+        format_sql: true  
+
+  # Configuración de seguridad JWT
+  security:
+    jwt:
+      # MÍNIMO 32 caracteres para el algoritmo HS256
+      secret: "CLAVE 32 CARACTERES_MINIMO!!"
+      #tiempo en el que expira el tocken en min
+      expiration-minutes: 15  
+
+# Configuración del Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
